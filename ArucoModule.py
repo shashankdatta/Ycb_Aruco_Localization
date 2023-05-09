@@ -77,8 +77,29 @@ def main():
     else:
         generateArucoMarkers()
 
-    cap = cv2.VideoCapture(-1)
-    # imgAug = cv2.imread("Markers/0.jpg")
+    # Regular Video Capture    
+    # cap = cv2.VideoCapture(-1) // Could be this too!
+    # cap = cv2.VideoCapture(0)
+
+    # Video Capture With Set Resolution, FPS, and Camera Settings
+    cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
+
+    # Resolution Settings:
+    # cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)
+    # cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
+    # cap.set(cv2.CAP_PROP_FPS, 60)
+    
+    # Camera Settings:
+    # cap.set(cv2.CAP_PROP_BRIGHTNESS, 150)
+    # cap.set(cv2.CAP_PROP_CONTRAST, 150)
+    # cap.set(cv2.CAP_PROP_SATURATION, 150)
+    # cap.set(cv2.CAP_PROP_HUE, 150)
+    # cap.set(cv2.CAP_PROP_EXPOSURE, 150)
+    # cap.set(cv2.CAP_PROP_GAIN, 150)
+    # cap.set(cv2.CAP_PROP_WHITE_BALANCE, 150)
+    # cap.set(cv2.CAP_PROP_BACKLIGHT, 150)
+    # cap.set(cv2.CAP_PROP_ZOOM, 150)
+    # cap.set(cv2.CAP_PROP_FOCUS, 150)
     
     while cap.isOpened():
         ret, frame = cap.read()
@@ -91,21 +112,21 @@ def main():
             for bbox, Id in zip(arucosFound[0], arucosFound[1]):
                 if (int(Id) in augDics.keys()):
                     frame = augmentAruco(bbox, Id, frame, augDics[int(Id)])
-                    # print(Id, bbox)
-                    # Bounding Box Coordinates
-                    tl = bbox[0][0][0], bbox[0][0][1]
-                    tr = bbox[0][1][0], bbox[0][1][1]
-                    br = bbox[0][2][0], bbox[0][2][1]
-                    bl = bbox[0][3][0], bbox[0][3][1]
                     
-                    cx = int((int(tr[0]) + int(tl[0])) / 2)
-                    cy = int((int(tr[1]) + int(br[1])) / 2)
-
-                    # Convert Pixel cx, cy into Real World x, y:
-                    # TODO 
+                    # print(Id, bbox)
+                    
+                    ### Draw Bounding Box and Centroid on the Aruco Marker
+                    # Bounding Box Coordinates
+                    # tl = bbox[0][0][0], bbox[0][0][1]
+                    # tr = bbox[0][1][0], bbox[0][1][1]
+                    # br = bbox[0][2][0], bbox[0][2][1]
+                    # bl = bbox[0][3][0], bbox[0][3][1]
+                    
+                    # cx = int((int(tr[0]) + int(tl[0])) / 2)
+                    # cy = int((int(tr[1]) + int(br[1])) / 2)
                     
                     # Centroid Point of The Bounding Box
-                    cv2.circle(frame, (cx, cy), 5, (255, 0, 0), -1)
+                    # cv2.circle(frame, (cx, cy), 5, (255, 0, 0), -1)
             # print(bbox[0][1][0], bbox[0][1][1])
         
         cv2.imshow('Live Aruco Marker Detection', frame)
